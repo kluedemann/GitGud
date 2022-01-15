@@ -2,8 +2,13 @@ import pygame
 from pygame.locals import *
 
 class Game():
+
     def __init__(self, surface: pygame.Surface, l: int = 3, w: int = 3, h: int = 3):
         self.surface = surface
+        self.bg_color = pygame.Color('black')
+        width = self.surface.get_width()//3
+        height = self.surface.get_height()//3
+
         self.board = [
             [
                 [
