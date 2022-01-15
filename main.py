@@ -28,43 +28,38 @@ class Game():
         self.h = h
 
     def draw(self):
-        angle = math.pi / 3
+        angle = math.pi / 4
         offset = {
             'x': self.surface.get_width() / 2,
-            'y': self.surface.get_height() / 2
+            'y': self.surface.get_height() / 2 - 300
         }
 
         for z, board in enumerate(self.board):
             for x, row in enumerate(board):
                 for y, cube in enumerate(row):
+                    center = (
+                        offset['x'] - 100 * x * math.cos(angle) + 100 * y * math.sin(angle),
+                        offset['y'] + 50 * x * math.cos(angle) + 50 * y * math.sin(angle) + z * 250
+                    )
                     if cube == 'X':
                         pygame.draw.circle(
                             self.surface,
                             (255, 0, 0),
-                            (
-                                offset['x'] + 100 * x * math.cos(angle),
-                                offset['y'] + 100 * y * math.sin(angle)
-                            ),
+                            center,
                             5
                         )
                     elif cube == 'O':
                         pygame.draw.circle(
                             self.surface,
                             (0, 0, 255),
-                            (
-                                offset['x'] + 100 * x * math.cos(angle),
-                                offset['y'] + 100 * y * math.sin(angle)
-                            ),
+                            center,
                             5
                         )
                     else:
                         pygame.draw.circle(
                             self.surface,
                             (255, 255, 255),
-                            (
-                                offset['x'] + 100 * x * math.cos(angle),
-                                offset['y'] + 100 * y * math.sin(angle)
-                            ),
+                            center,
                             5
                         )
 
@@ -96,7 +91,7 @@ def main():
     # initialize pygame modules
     pygame.init()
     # create display window
-    pygame.display.set_mode((600, 600))
+    pygame.display.set_mode((720, 720))
     # title display window
     pygame.display.set_caption('Tic Tac Toe')
     # get display surface
