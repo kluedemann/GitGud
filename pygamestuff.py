@@ -6,4 +6,9 @@ def main():
     my_sur = pygame.display.get_surface()
     rect = pygame.Rect(100, 100, 200, 200)
     pygame.draw.rect(my_sur, pygame.Color('white'), rect)
+    pygame.display.update()
+    input()
     pygame.quit()
+
+
+main()
