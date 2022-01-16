@@ -33,6 +33,7 @@ class Game():
 
     def draw(self):
         # Draw board with coloured circles
+        self.surface.fill((0, 0, 0))
         for z, board in enumerate(self.board):
             for x, row in enumerate(board):
                 for y, cube in enumerate(row):
@@ -50,6 +51,21 @@ class Game():
                             center,
                             radius
                         )
+
+        self.draw_turn()
+        pygame.display.update()
+        return
+
+    def draw_turn(self):
+        player = self.players[self.turn_num % 2]
+        text_str = f"{player}'s turn!"
+        if player == 'X':
+            color = (255, 0, 0)
+        elif player == 'O':
+            color = (0, 0, 255)
+        text_font = pygame.font.SysFont('', 75)
+        text_image = text_font.render(text_str, True, color)
+        self.surface.blit(text_image, (0, 0))
         pygame.display.update()
         return
 
@@ -83,12 +99,12 @@ class Game():
                 pos = self.get_pos(coords)
                 if self.turn(player, pos[0], pos[1], pos[2]):
                     # Successful turn
+                    self.turn_num += 1
                     self.draw()
                     if self.check_win(player):
                         self.game_over = True
                         self.draw_over(player)
                     print(self)
-                    self.turn_num += 1
                     if self.turn_num == (self.l * self.w * self.h):
                         self.game_over = True
                         self.draw_over(' ')
