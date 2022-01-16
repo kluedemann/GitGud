@@ -32,6 +32,7 @@ class Game():
         self.board_coords = self.get_coords()
 
     def draw(self):
+        # Draw board with coloured circles
         for z, board in enumerate(self.board):
             for x, row in enumerate(board):
                 for y, cube in enumerate(row):
@@ -53,6 +54,7 @@ class Game():
 
 
     def turn(self, player: str, x: int, y: int, z: int) -> bool:
+        # Update board state
         if self.board[z][x][y] == ' ':
             self.board[z][x][y] = player
             return True
@@ -60,26 +62,34 @@ class Game():
 
 
     def play(self):
+        # Run main game loop
         self.draw()
         while not self.game_over:
             self.get_events()
         return
 
     def get_events(self):
+        # Get pygame events
         events = pygame.event.get()
         for event in events:
+            # Exit game
             if event.type == pygame.QUIT:
                 self.game_over = True
             elif event.type == pygame.MOUSEBUTTONUP:
+                # Attempt to play turn
                 player = self.players[self.turn_num % 2]
                 coords = pygame.mouse.get_pos()
                 if self.move(player, coords):
+                    # Successful turn
                     self.draw()
+                    if self.check_win(player):
+                        self.game_over = True
                     print(self)
                     self.turn_num += 1
         return
 
     def move(self, player, coords):
+        # Play a move at given coordinates
         for z, board in enumerate(self.board):
             for x, row in enumerate(board):
                 for y, cube in enumerate(row):
@@ -88,12 +98,14 @@ class Game():
         return
 
     def dist(self, pos1, pos2):
+        # Get dist between points
         total = 0
         for i in range(2):
             total += (pos1[i] - pos2[i]) ** 2
         return total ** (1/2)
 
     def get_coords(self):
+        # Calculate board coordinates
         angle = math.pi / 4
         offset = {
             'x': self.surface.get_width() / 2,
@@ -114,6 +126,11 @@ class Game():
                 table.append(col)
             coords.append(table)
         return coords
+
+    def check_win(self):
+        # Check rows/cols
+        # assuming x == y == z
+        return False
 
 
     def __str__(self) -> str:
