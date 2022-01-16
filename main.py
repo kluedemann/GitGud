@@ -38,7 +38,7 @@ class Game():
             for x, row in enumerate(board):
                 for y, cube in enumerate(row):
                     center = self.board_coords[z][x][y]
-                    radius = 5 * (1.1) ** (x + y)
+                    radius = 5 * (1.15) ** (x + y)
                     if cube == 'X':
                         color = (255, 0, 0)
                     elif cube == 'O':
@@ -89,14 +89,22 @@ class Game():
                         self.draw_over(player)
                     print(self)
                     self.turn_num += 1
+                    if self.turn_num == (self.l * self.w * self.h):
+                        self.game_over = True
+                        self.draw_over(' ')
         return
 
     def draw_over(self, player):
-        text_str = f"{player} wins!"
+        if player != ' ':
+            text_str = f"{player} wins!"
+        else:
+            text_str = f"Tie!"
         if player == 'X':
             color = (255, 0, 0)
-        else:
+        elif player == 'O':
             color = (0, 0, 255)
+        else:
+            color = (255, 255, 255)
         text_font = pygame.font.SysFont('', 75)
         text_image = text_font.render(text_str, True, color)
         self.surface.blit(text_image, (500, 475))
