@@ -207,6 +207,8 @@ class Bot():
         """
         if game.turn_num < 5 or random.random() < self.epsilon:
             z, x, y = random.randint(0, game.h - 1), random.randint(0, game.l - 1), random.randint(0, game.w - 1)
+            while game.board[z][x][y] != ' ':
+                z, x, y = random.randint(0, game.h - 1), random.randint(0, game.l - 1), random.randint(0, game.w - 1)
             return z, x, y, 0
         else:
             return self.minimax(game, self.player)

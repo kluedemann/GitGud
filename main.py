@@ -58,6 +58,8 @@ class Game():
                         )
         if not self.game_over:
             self.draw_turn()
+        else:
+            self.draw_over(self.players[1 - self.turn_num % 2])
         if test:
             pygame.display.update()
         return
@@ -99,7 +101,7 @@ class Game():
         if self.check_win(player) or self.turn_num == (self.l * self.w * self.h):
             self.game_over = True
             self.draw()
-            self.draw_over(player)
+            
 
 
 
