@@ -27,6 +27,7 @@ class Game():
         self.w = w
         self.h = h
         self.game_over = False
+        self.exit = False
         self.turn_num = 0
         self.players = ['X', 'O']
         self.board_coords = self.get_coords()
@@ -64,7 +65,7 @@ class Game():
     def play(self):
         # Run main game loop
         self.draw()
-        while not self.game_over:
+        while not self.exit:
             self.get_events()
         return
 
@@ -74,8 +75,8 @@ class Game():
         for event in events:
             # Exit game
             if event.type == pygame.QUIT:
-                self.game_over = True
-            elif event.type == pygame.MOUSEBUTTONUP:
+                self.exit = True
+            elif event.type == pygame.MOUSEBUTTONUP and not self.game_over:
                 # Attempt to play turn
                 player = self.players[self.turn_num % 2]
                 coords = pygame.mouse.get_pos()
@@ -84,8 +85,22 @@ class Game():
                     self.draw()
                     if self.check_win(player):
                         self.game_over = True
+                        self.draw_over(player)
                     print(self)
                     self.turn_num += 1
+        return
+    
+    def draw_over(self, player):
+        text_str = f"{player} wins!"
+        if player == 'X':
+            color = (255, 0, 0)
+        else:
+            color = (0, 0, 255)
+        text_font = pygame.font.SysFont('', 75)
+        text_image = text_font.render(text_str, True, color)
+        self.surface.blit(text_image, (500, 475))
+        self.surface.blit(text_image, (50, 475))
+        pygame.display.update()
         return
 
     def move(self, player, coords):
