@@ -13,8 +13,6 @@ class Game():
             h: int = 4):
         self.surface = surface
         self.bg_color = pygame.Color('black')
-        width = self.surface.get_width() // 3
-        height = self.surface.get_height() // 3
 
         self.board = [
             [
@@ -33,6 +31,8 @@ class Game():
         self.board_coords = self.get_coords()
         self.bot = Bot(self.players[1], 2, 0)
         self.mode = 'AI'
+        self.pos = None
+
 
     def draw(self):
         # Draw board with coloured circles
@@ -92,15 +92,47 @@ class Game():
                 # Attempt to play turn
                 player = self.players[self.turn_num % 2]
                 coords = pygame.mouse.get_pos()
-                if self.move(player, coords):
+                pos = self.get_pos(coords)
+                if self.turn(player, pos[0], pos[1], pos[2]):
                     # Successful turn
                     self.update(player)
-
                     if self.mode == 'AI' and not self.game_over:
                         z, x, y, _ = self.bot.action(self)
                         player = self.players[self.turn_num % 2]
                         self.turn(player, x, y, z)
                         self.update(player)
+
+            elif event.type == pygame.MOUSEMOTION:
+                coords = pygame.mouse.get_pos()
+                if self.pos is not None:
+                    self.highlight(False)
+                self.pos = self.get_pos(coords)
+                if self.pos is not None:
+                    self.highlight(True)
+                pygame.display.update()
+
+        return
+
+    def highlight(self, is_yellow):
+        x, y, z = self.pos
+        if is_yellow:
+            color = (255, 255, 0)
+        else:
+            if self.board[z][x][y] == 'X':
+                color = (255, 0, 0)
+            elif self.board[z][x][y] == 'O':
+                color = (0, 0, 255)
+            else:
+                color = (255, 255, 255)
+        center = self.board_coords[z][x][y]
+        radius = 5 * (1.15) ** (x + y)
+        pygame.draw.circle(
+                            self.surface,
+                            color,
+                            center,
+                            radius
+                        )
+
         return
 
     def draw_over(self, player):
@@ -121,13 +153,13 @@ class Game():
         pygame.display.update()
         return
 
-    def move(self, player, coords):
+    def get_pos(self, coords):
         # Play a move at given coordinates
         for z, board in enumerate(self.board):
             for x, row in enumerate(board):
                 for y, cube in enumerate(row):
                     if self.dist(coords, self.board_coords[z][x][y]) < 25:
-                        return self.turn(player, x, y, z)
+                        return (x, y, z)
         return
 
     def dist(self, pos1, pos2):
