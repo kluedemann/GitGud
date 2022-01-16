@@ -115,23 +115,24 @@ class Game():
 
     def highlight(self, is_yellow):
         x, y, z = self.pos
-        if is_yellow:
+
+        if self.board[z][x][y] == 'X':
+            color = (255, 0, 0)
+        elif self.board[z][x][y] == 'O':
+            color = (0, 0, 255)
+        elif is_yellow:
             color = (255, 255, 0)
         else:
-            if self.board[z][x][y] == 'X':
-                color = (255, 0, 0)
-            elif self.board[z][x][y] == 'O':
-                color = (0, 0, 255)
-            else:
-                color = (255, 255, 255)
+            color = (255, 255, 255)
+
         center = self.board_coords[z][x][y]
         radius = 5 * (1.15) ** (x + y)
         pygame.draw.circle(
-                            self.surface,
-                            color,
-                            center,
-                            radius
-                        )
+            self.surface,
+            color,
+            center,
+            radius
+        )
 
         return
 
