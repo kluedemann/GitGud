@@ -27,7 +27,9 @@ class Bot():
         Args:
         game: Tic tac toe game
         """
+        # number of positions one away from winning
         ones = 0
+        # number of positions two away from winning
         twos = 0
         n = game.l
 
@@ -151,7 +153,8 @@ class Bot():
         player: character for player
         """
         if depth >= self.max_depth or self.game_over(game):
-            score = self.evaluate(game)
+            # depth-based discounting
+            score = self.evaluate(game) * 0.9 ** depth
             return [-1, -1, -1, score]
 
         if player == self.player:
