@@ -90,8 +90,9 @@ class Game():
 
     def update(self, player: str):
         print(self)
-        self.draw()
         self.turn_num += 1
+        self.draw()
+        
         if self.check_win(player) or self.turn_num == (self.l * self.w * self.h):
             self.game_over = True
             self.draw_over(player)
