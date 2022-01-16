@@ -26,6 +26,9 @@ class Game():
         self.l = l
         self.w = w
         self.h = h
+        self.game_over = False
+        self.turn_num = 0
+        self.players = ['X', 'O']
 
     def draw(self):
         angle = math.pi / 4
@@ -62,6 +65,8 @@ class Game():
                             center,
                             5
                         )
+        pygame.display.update()
+        return
 
 
     def turn(self, player: str, x: int, y: int, z: int) -> bool:
@@ -73,8 +78,23 @@ class Game():
 
     def play(self):
         self.draw()
-        pygame.display.update()
-        input()
+        while not self.game_over:
+            self.get_events()
+        return
+
+    def get_events(self):
+        events = pygame.event.get()
+        for event in events:
+            if event.type == pygame.QUIT:
+                self.game_over = True
+            elif event.type == pygame.MOUSEBUTTONUP:
+                player = self.players[self.turn_num % 2]
+                coords = pygame.mouse.get_pos()
+                self.turn(player, self.turn_num % 3, (self.turn_num % 9) // 3, self.turn_num // 9)
+                self.draw()
+                print(self)
+                self.turn_num += 1
+        return
 
 
     def __str__(self) -> str:
