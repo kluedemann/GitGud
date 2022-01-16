@@ -30,7 +30,7 @@ class Game():
         self.players = ['X', 'O']
         self.board_coords = self.get_coords()
         self.bot = Bot(self.players[1], max_depth=3, epsilon=0)
-        self.mode = 'AI'
+        self.mode = ''
         self.pos = None
 
 
@@ -74,7 +74,6 @@ class Game():
         text_font = pygame.font.SysFont('', 75)
         text_image = text_font.render(text_str, True, color)
         self.surface.blit(text_image, (0, 0))
-        pygame.display.update()
         return
 
 
@@ -129,13 +128,17 @@ class Game():
 
             elif event.type == pygame.MOUSEMOTION:
                 coords = pygame.mouse.get_pos()
+                update = False
                 if self.pos is not None:
                     #self.highlight(False)
                     self.draw(False)
+                    update = True
                 self.pos = self.get_pos(coords)
                 if self.pos is not None:
                     self.highlight(True)
-                pygame.display.update()
+                    update = True
+                if update:
+                    pygame.display.update()
                 
 
         return
@@ -176,6 +179,48 @@ class Game():
         start = self.board_coords[0][x][y]
         end = self.board_coords[3][x][y]
         pygame.draw.line(self.surface, color, start, end)
+        # if x == y:
+        #     start = self.board_coords[z][0][0]
+        #     end = self.board_coords[z][3][3]
+        #     pygame.draw.line(self.surface, color, start, end)
+        # if x == z:
+        #     start = self.board_coords[0][0][y]
+        #     end = self.board_coords[3][3][y]
+        #     pygame.draw.line(self.surface, color, start, end)
+        # if z == y:
+        #     start = self.board_coords[0][x][0]
+        #     end = self.board_coords[3][x][3]
+        #     pygame.draw.line(self.surface, color, start, end)
+        # if x == 3 - y:
+        #     start = self.board_coords[z][0][3]
+        #     end = self.board_coords[z][3][0]
+        #     pygame.draw.line(self.surface, color, start, end)
+        # if x == 3 - z:
+        #     start = self.board_coords[0][3][y]
+        #     end = self.board_coords[3][0][y]
+        #     pygame.draw.line(self.surface, color, start, end)
+        # if z == 3 - y:
+        #     start = self.board_coords[0][x][3]
+        #     end = self.board_coords[3][x][0]
+        #     pygame.draw.line(self.surface, color, start, end)
+        # if x == y and z == y:
+        #     start = self.board_coords[0][0][0]
+        #     end = self.board_coords[3][3][3]
+        #     pygame.draw.line(self.surface, color, start, end)
+        # if x == y and z == 3 - y:
+        #     start = self.board_coords[0][3][3]
+        #     end = self.board_coords[3][0][0]
+        #     pygame.draw.line(self.surface, color, start, end)
+        # if x == 3 - y and z == x:
+        #     start = self.board_coords[0][0][3]
+        #     end = self.board_coords[3][3][0]
+        #     pygame.draw.line(self.surface, color, start, end)
+        # if x == 3 - y and z == y:
+        #     start = self.board_coords[3][0][3]
+        #     end = self.board_coords[0][3][0]
+        #     pygame.draw.line(self.surface, color, start, end)
+        return
+
 
     def draw_over(self, player):
         if player != ' ':
