@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 import math
-
+from bot import Bot
 
 class Game():
 
@@ -29,7 +29,10 @@ class Game():
         self.turn_num = 0
         self.players = ['X', 'O']
         self.board_coords = self.get_coords()
+        self.bot = Bot(self.players[1], 2, 0)
+        self.mode = 'AI'
         self.pos = None
+
 
     def draw(self):
         # Draw board with coloured circles
@@ -85,6 +88,15 @@ class Game():
             self.get_events()
         return
 
+    def update(self, player: str):
+        print(self)
+        self.draw()
+        self.turn_num += 1
+        if self.check_win(player) or self.turn_num == (self.l * self.w * self.h):
+            self.game_over = True
+            self.draw_over(player)
+
+
     def get_events(self):
         # Get pygame events
         events = pygame.event.get()
@@ -99,15 +111,13 @@ class Game():
                 pos = self.get_pos(coords)
                 if self.turn(player, pos[0], pos[1], pos[2]):
                     # Successful turn
-                    self.turn_num += 1
-                    self.draw()
-                    if self.check_win(player):
-                        self.game_over = True
-                        self.draw_over(player)
-                    print(self)
-                    if self.turn_num == (self.l * self.w * self.h):
-                        self.game_over = True
-                        self.draw_over(' ')
+                    self.update(player)
+                    if self.mode == 'AI' and not self.game_over:
+                        z, x, y, _ = self.bot.action(self)
+                        player = self.players[self.turn_num % 2]
+                        self.turn(player, x, y, z)
+                        self.update(player)
+
             elif event.type == pygame.MOUSEMOTION:
                 coords = pygame.mouse.get_pos()
                 if self.pos is not None:
@@ -121,23 +131,25 @@ class Game():
 
     def highlight(self, is_yellow):
         x, y, z = self.pos
-        if is_yellow:
+
+        if self.board[z][x][y] == 'X':
+            color = (255, 0, 0)
+        elif self.board[z][x][y] == 'O':
+            color = (0, 0, 255)
+        elif is_yellow:
             color = (255, 255, 0)
         else:
-            if self.board[z][x][y] == 'X':
-                color = (255, 0, 0)
-            elif self.board[z][x][y] == 'O':
-                color = (0, 0, 255)
-            else:
-                color = (255, 255, 255)
+            color = (255, 255, 255)
+
         center = self.board_coords[z][x][y]
         radius = 5 * (1.15) ** (x + y)
         pygame.draw.circle(
-                            self.surface,
-                            color,
-                            center,
-                            radius
-                        )
+            self.surface,
+            color,
+            center,
+            radius
+        )
+
         return
 
     def draw_over(self, player):
