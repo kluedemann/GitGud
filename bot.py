@@ -27,7 +27,6 @@ class Bot():
         Args:
         game: Tic tac toe game
         """
-        score = 0
         ones = 0
         twos = 0
         n = game.l
@@ -38,10 +37,16 @@ class Bot():
                 for k in range(n):
                     if game.board[i][j][k] == self.player:
                         count[0] += 1
+                    elif game.board[i][j][k] == self.opponent:
+                        count[0] -= 1
                     if game.board[i][k][j] == self.player:
                         count[1] += 1
+                    elif game.board[i][k][j] == self.opponent:
+                        count[1] -= 1
                     if game.board[k][i][j] == self.player:
                         count[2] += 1
+                    elif game.board[k][i][j] == self.opponent:
+                        count[2] -= 1
                 for k in range(3):
                     if count[k] == n - 1:
                         ones += 1
@@ -52,16 +57,28 @@ class Bot():
             for k in range(n):
                 if game.board[i][k][k] == self.player:
                     count[0] += 1
+                elif game.board[i][k][k] == self.opponent:
+                    count[0] -= 1
                 if game.board[k][i][k] == self.player:
                     count[1] += 1
+                elif game.board[k][i][k] == self.opponent:
+                    count[1] -= 1
                 if game.board[k][k][i] == self.player:
                     count[2] += 1
+                elif game.board[k][k][i] == self.opponent:
+                    count[2] -= 1
                 if game.board[i][n-k-1][k] == self.player:
                     count[3] += 1
+                elif game.board[i][n-k-1][k] == self.opponent:
+                    count[3] -= 1
                 if game.board[n-k-1][i][k] == self.player:
                     count[4] += 1
+                elif game.board[n-k-1][i][k] == self.opponent:
+                    count[4] -= 1
                 if game.board[n-k-1][k][i] == self.player:
                     count[5] += 1
+                elif game.board[n-k-1][k][i] == self.opponent:
+                    count[5] -= 1
             for k in range(6):
                 if count[k] == n - 1:
                     ones += 1
@@ -71,68 +88,25 @@ class Bot():
         for k in range(n):
             if game.board[k][k][k] == self.player:
                 count[0] += 1
+            elif game.board[k][k][k] == self.opponent:
+                count[0] -= 1
             if game.board[k][k][n-k-1] == self.player:
                 count[1] += 1
+            elif game.board[k][k][n-k-1] == self.opponent:
+                count[1] -= 1
             if game.board[k][n-k-1][k] == self.player:
                 count[2] += 1
+            elif game.board[k][n-k-1][k] == self.opponent:
+                count[2] -= 1
             if game.board[k][n-k-1][n-k-1] == self.player:
                 count[3] += 1
+            elif game.board[k][n-k-1][n-k-1] == self.opponent:
+                count[3] -= 1
         for k in range(4):
             if count[k] == n - 1:
                 ones += 1
             if count[k] == n - 2:
                 twos += 1
-        # opponent score
-        for i in range(n):
-            for j in range(n):
-                count = [0, 0, 0]
-                for k in range(n):
-                    if game.board[i][j][k] == self.opponent:
-                        count[0] += 1
-                    if game.board[i][k][j] == self.opponent:
-                        count[1] += 1
-                    if game.board[k][i][j] == self.opponent:
-                        count[2] += 1
-                for k in range(3):
-                    if count[k] == n - 1:
-                        ones -= 1
-                    if count[k] == n - 2:
-                        twos -= 1
-        for i in range(n):
-            count = [0] * 6
-            for k in range(n):
-                if game.board[i][k][k] == self.opponent:
-                    count[0] += 1
-                if game.board[k][i][k] == self.opponent:
-                    count[1] += 1
-                if game.board[k][k][i] == self.opponent:
-                    count[2] += 1
-                if game.board[i][n-k-1][k] == self.opponent:
-                    count[3] += 1
-                if game.board[n-k-1][i][k] == self.opponent:
-                    count[4] += 1
-                if game.board[n-k-1][k][i] == self.opponent:
-                    count[5] += 1
-            for k in range(6):
-                if count[k] == n - 1:
-                    ones -= 1
-                if count[k] == n - 2:
-                    twos -= 1
-        count = [0] * 4
-        for k in range(n):
-            if game.board[k][k][k] == self.opponent:
-                count[0] += 1
-            if game.board[k][k][n-k-1] == self.opponent:
-                count[1] += 1
-            if game.board[k][n-k-1][k] == self.opponent:
-                count[2] += 1
-            if game.board[k][n-k-1][n-k-1] == self.opponent:
-                count[3] += 1
-        for k in range(4):
-            if count[k] == n - 1:
-                ones -= 1
-            if count[k] == n - 2:
-                twos -= 1
 
         if ones != 0:
             return ones * 0.5
