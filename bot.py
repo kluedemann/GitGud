@@ -137,9 +137,9 @@ class Bot():
         """
         if self.game_over(game):
             if game.check_win(self.player):
-                return 1 if depth else inf
+                return 1 if depth else 10
             elif game.check_win(self.opponent):
-                return -1 if depth > 2 else -inf
+                return -1 if depth > 2 else -20
             else:
                 return 0
 
