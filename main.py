@@ -30,24 +30,26 @@ class Game():
         self.players = ['X', 'O']
         self.board_coords = self.get_coords()
         self.bot = Bot(self.players[1], 2, 0)
-        self.mode = ' '
+        self.mode = 'AI'
         self.pos = None
 
 
-    def draw(self):
+    def draw(self, test=True):
         # Draw board with coloured circles
         self.surface.fill((0, 0, 0))
         for z, board in enumerate(self.board):
             for x, row in enumerate(board):
                 for y, cube in enumerate(row):
                     center = self.board_coords[z][x][y]
-                    radius = 5 * (1.15) ** (x + y)
+                    radius = 5 * (1.25) ** (math.cos(self.angle) * x + math.sin(self.angle) *y)
                     if cube == 'X':
                         color = (255, 0, 0)
                     elif cube == 'O':
                         color = (0, 0, 255)
                     else:
+                        #color = (100 + 155 * ((z) % 2), 255, 100 + 155 * ((z) % 2))
                         color = (255, 255, 255)
+
                     pygame.draw.circle(
                             self.surface,
                             color,
@@ -56,7 +58,8 @@ class Game():
                         )
         if not self.game_over:
             self.draw_turn()
-        pygame.display.update()
+        if test:
+            pygame.display.update()
         return
 
     def draw_turn(self):
@@ -124,11 +127,13 @@ class Game():
             elif event.type == pygame.MOUSEMOTION:
                 coords = pygame.mouse.get_pos()
                 if self.pos is not None:
-                    self.highlight(False)
+                    #self.highlight(False)
+                    self.draw(False)
                 self.pos = self.get_pos(coords)
                 if self.pos is not None:
                     self.highlight(True)
                 pygame.display.update()
+                
 
         return
 
@@ -145,15 +150,29 @@ class Game():
             color = (255, 255, 255)
 
         center = self.board_coords[z][x][y]
-        radius = 5 * (1.15) ** (x + y)
+        radius = 5 * (1.25) ** (math.cos(self.angle) * x + math.sin(self.angle) *y)
         pygame.draw.circle(
             self.surface,
             color,
             center,
             radius
         )
+        self.draw_lines()
 
         return
+
+    def draw_lines(self):
+        color = (255, 255, 0)
+        x, y, z = self.pos
+        start = self.board_coords[z][x][0]
+        end = self.board_coords[z][x][3]
+        pygame.draw.line(self.surface, color, start, end)
+        start = self.board_coords[z][0][y]
+        end = self.board_coords[z][3][y]
+        pygame.draw.line(self.surface, color, start, end)
+        start = self.board_coords[0][x][y]
+        end = self.board_coords[3][x][y]
+        pygame.draw.line(self.surface, color, start, end)
 
     def draw_over(self, player):
         if player != ' ':
@@ -191,7 +210,8 @@ class Game():
 
     def get_coords(self):
         # Calculate board coordinates
-        angle = math.pi / 4
+        self.angle = (math.pi / 4) + 0.1
+        angle = self.angle
         offset = {
             'x': self.surface.get_width() / 2,
             'y': self.surface.get_height() / 2 - 480
