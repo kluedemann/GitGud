@@ -29,7 +29,7 @@ class Game():
         self.turn_num = 0
         self.players = ['X', 'O']
         self.board_coords = self.get_coords()
-        self.bot = Bot(self.players[1], 2, 0)
+        self.bot = Bot(self.players[1], max_depth=3, epsilon=0)
         self.mode = 'AI'
         self.pos = None
 
@@ -97,6 +97,7 @@ class Game():
                     # Successful turn
                     self.update(player)
                     if self.mode == 'AI' and not self.game_over:
+                        print(self.turn_num)
                         z, x, y, _ = self.bot.action(self)
                         player = self.players[self.turn_num % 2]
                         self.turn(player, x, y, z)
