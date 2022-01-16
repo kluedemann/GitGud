@@ -22,6 +22,119 @@ class Bot():
         """
         return any([game.check_win(player) for player in game.players])
 
+
+    def heuristic(self, game: 'Game'):
+        """
+        Args:
+        game: Tic tac toe game
+        """
+        score = 0
+        n = game.l
+        # player score
+        for i in range(n):
+            for j in range(n):
+                count = [0, 0, 0]
+                for k in range(n):
+                    if game.board[i][j][k] == self.player:
+                        count[0] += 1
+                    if game.board[i][k][j] == self.player:
+                        count[1] += 1
+                    if game.board[k][i][j] == self.player:
+                        count[2] += 1
+                for k in range(3):
+                    if count[k] == n - 1:
+                        score += 0.5
+                    if count[k] == n - 2:
+                        score += 0.25
+        for i in range(n):
+            count = [0] * 6
+            for k in range(n):
+                if game.board[i][k][k] == self.player:
+                    count[0] += 1
+                if game.board[k][i][k] == self.player:
+                    count[1] += 1
+                if game.board[k][k][i] == self.player:
+                    count[2] += 1
+                if game.board[i][n-k-1][k] == self.player:
+                    count[3] += 1
+                if game.board[n-k-1][i][k] == self.player:
+                    count[4] += 1
+                if game.board[n-k-1][k][i] == self.player:
+                    count[5] += 1
+            for k in range(6):
+                if count[k] == n - 1:
+                    score += 0.5
+                if count[k] == n - 2:
+                    score += 0.25
+        count = [0] * 4
+        for k in range(n):
+            if game.board[k][k][k] == self.player:
+                count[0] += 1
+            if game.board[k][k][n-k-1] == self.player:
+                count[1] += 1
+            if game.board[k][n-k-1][k] == self.player:
+                count[2] += 1
+            if game.board[k][n-k-1][n-k-1] == self.player:
+                count[3] += 1
+        for k in range(4):
+            if count[k] == n - 1:
+                score += 0.5
+            if count[k] == n - 2:
+                score += 0.25
+        # opponent score
+        for i in range(n):
+            for j in range(n):
+                count = [0, 0, 0]
+                for k in range(n):
+                    if game.board[i][j][k] == self.opponent:
+                        count[0] += 1
+                    if game.board[i][k][j] == self.opponent:
+                        count[1] += 1
+                    if game.board[k][i][j] == self.opponent:
+                        count[2] += 1
+                for k in range(3):
+                    if count[k] == n - 1:
+                        score -= 0.5
+                    if count[k] == n - 2:
+                        score -= 0.25
+        for i in range(n):
+            count = [0] * 6
+            for k in range(n):
+                if game.board[i][k][k] == self.opponent:
+                    count[0] += 1
+                if game.board[k][i][k] == self.opponent:
+                    count[1] += 1
+                if game.board[k][k][i] == self.opponent:
+                    count[2] += 1
+                if game.board[i][n-k-1][k] == self.opponent:
+                    count[3] += 1
+                if game.board[n-k-1][i][k] == self.opponent:
+                    count[4] += 1
+                if game.board[n-k-1][k][i] == self.opponent:
+                    count[5] += 1
+            for k in range(6):
+                if count[k] == n - 1:
+                    score -= 0.5
+                if count[k] == n - 2:
+                    score -= 0.25
+        count = [0] * 4
+        for k in range(n):
+            if game.board[k][k][k] == self.opponent:
+                count[0] += 1
+            if game.board[k][k][n-k-1] == self.opponent:
+                count[1] += 1
+            if game.board[k][n-k-1][k] == self.opponent:
+                count[2] += 1
+            if game.board[k][n-k-1][n-k-1] == self.opponent:
+                count[3] += 1
+        for k in range(4):
+            if count[k] == n - 1:
+                score -= 0.5
+            if count[k] == n - 2:
+                score -= 0.25
+        return score
+
+
     def evaluate(self, game: 'Game'):
         """
         Args:
@@ -34,7 +147,9 @@ class Bot():
                 return -1
             else:
                 return 0
-        return 0
+
+        return self.heuristic(game)
+
 
     def minimax(self, game: 'Game', player: str, alpha = - inf, beta = inf, depth: int = 0):
         """
