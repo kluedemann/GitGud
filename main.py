@@ -54,7 +54,7 @@ class Game():
 
     def draw_help(self):
         self.surface.fill((0, 0, 0))
-        lines = ["This game is 4x4x4 Tic-Tac-Toe.", "Click a dot to play a move.", "You win by aligning four dots in a row.", "They may be connected",  "horizontally, vertically, or diagonally.", 
+        lines = ["This game is 4x4x4 Tic-Tac-Toe.", "Click a dot to play a move.", "You win by aligning four dots in a row.", "They may be connected",  "horizontally, vertically, or diagonally.",
         "Play against a friend or the AI.", "Red is X and goes first. O is blue.", "Click to go back."]
         color = (255, 100, 0)
         text_font = pygame.font.SysFont('', 50)
@@ -173,7 +173,7 @@ class Game():
                         self.update(player)
             elif event.type == pygame.MOUSEBUTTONUP and self.start:
                 coords = pygame.mouse.get_pos()
-                print(coords) 
+                print(coords)
                 if self.help:
                     self.help = False
                     self.draw_start()
@@ -447,7 +447,7 @@ def main():
     # create display window
     pygame.display.set_mode((720, 1000))
     # title display window
-    pygame.display.set_caption('Tic Tac Toe')
+    pygame.display.set_caption('Tic Tac Toe Tub')
     # get display surface
     w_surface = pygame.display.get_surface()
     # create a game object
