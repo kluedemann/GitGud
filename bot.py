@@ -1,5 +1,4 @@
-from typing import List
-from math import inf
+from math import inf, copysign
 import random
 
 class Bot():
@@ -29,6 +28,8 @@ class Bot():
         game: Tic tac toe game
         """
         score = 0
+        ones = 0
+        twos = 0
         n = game.l
         # player score
         for i in range(n):
@@ -43,9 +44,9 @@ class Bot():
                         count[2] += 1
                 for k in range(3):
                     if count[k] == n - 1:
-                        score += 0.5
+                        ones += 1
                     if count[k] == n - 2:
-                        score += 0.25
+                        twos += 1
         for i in range(n):
             count = [0] * 6
             for k in range(n):
@@ -63,9 +64,9 @@ class Bot():
                     count[5] += 1
             for k in range(6):
                 if count[k] == n - 1:
-                    score += 0.5
+                    ones += 1
                 if count[k] == n - 2:
-                    score += 0.25
+                    twos += 1
         count = [0] * 4
         for k in range(n):
             if game.board[k][k][k] == self.player:
@@ -78,9 +79,9 @@ class Bot():
                 count[3] += 1
         for k in range(4):
             if count[k] == n - 1:
-                score += 0.5
+                ones += 1
             if count[k] == n - 2:
-                score += 0.25
+                twos += 1
         # opponent score
         for i in range(n):
             for j in range(n):
@@ -94,9 +95,9 @@ class Bot():
                         count[2] += 1
                 for k in range(3):
                     if count[k] == n - 1:
-                        score -= 0.5
+                        ones -= 1
                     if count[k] == n - 2:
-                        score -= 0.25
+                        twos -= 1
         for i in range(n):
             count = [0] * 6
             for k in range(n):
@@ -114,9 +115,9 @@ class Bot():
                     count[5] += 1
             for k in range(6):
                 if count[k] == n - 1:
-                    score -= 0.5
+                    ones -= 1
                 if count[k] == n - 2:
-                    score -= 0.25
+                    twos -= 1
         count = [0] * 4
         for k in range(n):
             if game.board[k][k][k] == self.opponent:
@@ -129,10 +130,16 @@ class Bot():
                 count[3] += 1
         for k in range(4):
             if count[k] == n - 1:
-                score -= 0.5
+                ones -= 1
             if count[k] == n - 2:
-                score -= 0.25
-        return score
+                twos -= 1
+
+        if ones != 0:
+            return ones * 0.5
+        elif twos != 0:
+            return twos * 0.25
+
+        return 0
 
 
     def evaluate(self, game: 'Game'):
