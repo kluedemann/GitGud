@@ -30,7 +30,7 @@ class Game():
         self.players = ['X', 'O']
         self.board_coords = self.get_coords()
         self.bot = Bot(self.players[1], 2, 0)
-        self.mode = 'AI'
+        self.mode = ' '
         self.pos = None
 
 
@@ -54,8 +54,8 @@ class Game():
                             center,
                             radius
                         )
-
-        self.draw_turn()
+        if not self.game_over:
+            self.draw_turn()
         pygame.display.update()
         return
 
@@ -95,7 +95,9 @@ class Game():
         
         if self.check_win(player) or self.turn_num == (self.l * self.w * self.h):
             self.game_over = True
+            self.draw()
             self.draw_over(player)
+            
 
 
     def get_events(self):
@@ -110,7 +112,7 @@ class Game():
                 player = self.players[self.turn_num % 2]
                 coords = pygame.mouse.get_pos()
                 pos = self.get_pos(coords)
-                if self.turn(player, pos[0], pos[1], pos[2]):
+                if pos is not None and self.turn(player, pos[0], pos[1], pos[2]):
                     # Successful turn
                     self.update(player)
                     if self.mode == 'AI' and not self.game_over:
