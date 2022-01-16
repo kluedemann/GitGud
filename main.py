@@ -30,7 +30,7 @@ class Game():
         self.players = ['X', 'O']
         self.board_coords = self.get_coords()
         self.bot = Bot(self.players[1], max_depth=3, epsilon=0)
-        self.mode = ''
+        self.mode = 'AI'
         self.pos = None
 
 
@@ -87,7 +87,17 @@ class Game():
 
     def play(self):
         # Run main game loop
+        # BOT GO FIRST
+        # self.turn_num = 1
+        
         self.draw()
+
+        # BOT GO FIRST
+        # z, x, y, _ = self.bot.action(self)
+        # player = self.players[self.turn_num % 2]
+        # self.turn(player, x, y, z)
+        # self.update(player)
+
         while not self.exit:
             self.get_events()
         return
@@ -226,7 +236,7 @@ class Game():
         if self.turn_num == self.l * self.w*self.h:
             player = ' '
         else:
-            player = self.players[1 - self.turn_num]
+            player = self.players[1 - self.turn_num % 2]
         if player != ' ':
             text_str = f"{player} wins!"
         else:
