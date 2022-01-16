@@ -32,6 +32,35 @@ class Game():
         self.bot = Bot(self.players[1], max_depth=3, epsilon=0)
         self.mode = 'AI'
         self.pos = None
+        self.start = True
+        self.help = False
+
+    def draw_start(self):
+        the_image = pygame.image.load("./Start.png")
+        the_image = pygame.transform.scale(the_image, self.surface.get_size())
+        self.surface.blit(the_image, (0, 0))
+        if self.mode == 'AI':
+            the_image = pygame.image.load("./croppedAI.PNG")
+            the_image = pygame.transform.scale(the_image, (335, 160))
+            self.surface.blit(the_image, (367, 561))
+        else:
+            the_image = pygame.image.load("./cropped2P.PNG")
+            the_image = pygame.transform.scale(the_image, (345, 162))
+            self.surface.blit(the_image, (13, 557))
+        pygame.display.update()
+        return
+
+    def draw_help(self):
+        self.surface.fill((0, 0, 0))
+        lines = ["This game is 4x4x4 Tic-Tac-Toe.", "Click a dot to play a move.", "You win by aligning four dots in a row.", "They may be connected",  "horizontally, vertically, or diagonally.", 
+        "Play against a friend or the AI.", "Red is X and goes first. O is blue.", "Click to go back."]
+        color = (255, 100, 0)
+        text_font = pygame.font.SysFont('', 50)
+        for i, line in enumerate(lines):
+            text_image = text_font.render(line, True, color)
+            self.surface.blit(text_image, (50, 75 + 75*i))
+        pygame.display.update()
+        return
 
 
     def draw(self, test=True):
@@ -89,8 +118,12 @@ class Game():
         # Run main game loop
         # BOT GO FIRST
         # self.turn_num = 1
+        self.draw_start()
+        while self.start:
+            self.get_events()
 
-        self.draw()
+        if not self.exit:
+            self.draw()
 
         # BOT GO FIRST
         # z, x, y, _ = self.bot.action(self)
@@ -120,8 +153,9 @@ class Game():
         for event in events:
             # Exit game
             if event.type == pygame.QUIT:
+                self.start = False
                 self.exit = True
-            elif event.type == pygame.MOUSEBUTTONUP and not self.game_over:
+            elif event.type == pygame.MOUSEBUTTONUP and not self.game_over and not self.start:
                 # Attempt to play turn
                 player = self.players[self.turn_num % 2]
                 coords = pygame.mouse.get_pos()
@@ -134,8 +168,24 @@ class Game():
                         player = self.players[self.turn_num % 2]
                         self.turn(player, x, y, z)
                         self.update(player)
-
-            elif event.type == pygame.MOUSEMOTION:
+            elif event.type == pygame.MOUSEBUTTONUP and self.start:
+                coords = pygame.mouse.get_pos()
+                print(coords) 
+                if self.help:
+                    self.help = False
+                    self.draw_start()
+                elif 132 <= coords[0] <= 586 and 86 <= coords[1] <= 296:
+                    self.start = False
+                elif 16 <= coords[0] <= 357 and 561 <= coords[1] <= 720:
+                    self.mode = ''
+                    self.draw_start()
+                elif 368 <= coords[0] <= 700 and 563 <= coords[1] <= 728:
+                    self.mode = 'AI'
+                    self.draw_start()
+                elif 133 <= coords[0] <= 584 and 327 <= coords[1] <= 539:
+                    self.help = True
+                    self.draw_help()
+            elif event.type == pygame.MOUSEMOTION and not self.start:
                 coords = pygame.mouse.get_pos()
                 update = False
                 if self.pos is not None:
