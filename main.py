@@ -41,8 +41,8 @@ class Game():
             for x, row in enumerate(board):
                 for y, cube in enumerate(row):
                     center = (
-                        offset['x'] - 100 * x * math.cos(angle) + 100 * y * math.sin(angle),
-                        offset['y'] + 50 * x * math.cos(angle) + 50 * y * math.sin(angle) + z * 250
+                        int(offset['x'] - 100 * x * math.cos(angle) + 100 * y * math.sin(angle)),
+                        int(offset['y'] + 50 * x * math.cos(angle) + 50 * y * math.sin(angle) + z * 250)
                     )
                     if cube == 'X':
                         pygame.draw.circle(
