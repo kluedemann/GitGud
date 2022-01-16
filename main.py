@@ -89,7 +89,7 @@ class Game():
         # Run main game loop
         # BOT GO FIRST
         # self.turn_num = 1
-        
+
         self.draw()
 
         # BOT GO FIRST
@@ -110,7 +110,7 @@ class Game():
         if self.check_win(player) or self.turn_num == (self.l * self.w * self.h):
             self.game_over = True
             self.draw()
-            
+
 
 
 
@@ -130,7 +130,6 @@ class Game():
                     # Successful turn
                     self.update(player)
                     if self.mode == 'AI' and not self.game_over:
-                        print(self.turn_num)
                         z, x, y, _ = self.bot.action(self)
                         player = self.players[self.turn_num % 2]
                         self.turn(player, x, y, z)
@@ -149,7 +148,7 @@ class Game():
                     update = True
                 if update:
                     pygame.display.update()
-                
+
 
         return
 

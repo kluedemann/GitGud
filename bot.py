@@ -30,7 +30,7 @@ class Bot():
         ones = 0
         twos = 0
         n = game.l
-        # player score
+
         for i in range(n):
             for j in range(n):
                 count = [0, 0, 0]
@@ -50,8 +50,12 @@ class Bot():
                 for k in range(3):
                     if count[k] == n - 1:
                         ones += 1
+                    if count[k] == 1 - n:
+                        ones -= 1
                     if count[k] == n - 2:
                         twos += 1
+                    if count[k] == 2 - n:
+                        twos -= 1
         for i in range(n):
             count = [0] * 6
             for k in range(n):
@@ -82,8 +86,12 @@ class Bot():
             for k in range(6):
                 if count[k] == n - 1:
                     ones += 1
+                if count[k] == 1 - n:
+                    ones -= 1
                 if count[k] == n - 2:
                     twos += 1
+                if count[k] == 2 - n:
+                    twos -= 1
         count = [0] * 4
         for k in range(n):
             if game.board[k][k][k] == self.player:
@@ -105,11 +113,15 @@ class Bot():
         for k in range(4):
             if count[k] == n - 1:
                 ones += 1
+            if count[k] == 1 - n:
+                ones -= 1
             if count[k] == n - 2:
                 twos += 1
+            if count[k] == 2 - n:
+                twos -= 1
 
         if ones != 0:
-            return ones * 0.5
+            return ones * 0.75
         elif twos != 0:
             return twos * 0.25
 
