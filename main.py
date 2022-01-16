@@ -59,7 +59,7 @@ class Game():
         if not self.game_over:
             self.draw_turn()
         else:
-            self.draw_over(self.players[1 - self.turn_num % 2])
+            self.draw_over()
         if test:
             pygame.display.update()
         return
@@ -222,7 +222,11 @@ class Game():
         return
 
 
-    def draw_over(self, player):
+    def draw_over(self):
+        if self.turn_num == self.l * self.w*self.h:
+            player = ' '
+        else:
+            player = self.players[1 - self.turn_num]
         if player != ' ':
             text_str = f"{player} wins!"
         else:
