@@ -29,7 +29,11 @@ class Game():
         self.turn_num = 0
         self.players = ['X', 'O']
         self.board_coords = self.get_coords()
+<<<<<<< HEAD
         self.bot = Bot(self.players[1], 2, 0)
+=======
+        self.bot = Bot(self.players[1], max_depth=3, epsilon=0)
+>>>>>>> 18bd23045079e9494dcec2b866866e27bc446be4
         self.mode = 'AI'
         self.pos = None
 
@@ -95,12 +99,12 @@ class Game():
         print(self)
         self.turn_num += 1
         self.draw()
-        
+
         if self.check_win(player) or self.turn_num == (self.l * self.w * self.h):
             self.game_over = True
             self.draw()
             self.draw_over(player)
-            
+
 
 
     def get_events(self):
@@ -119,6 +123,7 @@ class Game():
                     # Successful turn
                     self.update(player)
                     if self.mode == 'AI' and not self.game_over:
+                        print(self.turn_num)
                         z, x, y, _ = self.bot.action(self)
                         player = self.players[self.turn_num % 2]
                         self.turn(player, x, y, z)

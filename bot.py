@@ -36,7 +36,7 @@ class Bot():
                 return 0
         return 0
 
-    def minimax(self, game: 'Game', player: str, depth: int = 0):
+    def minimax(self, game: 'Game', player: str, alpha = - inf, beta = inf, depth: int = 0):
         """
         Args:
         game: Tic tac toe game
@@ -59,16 +59,29 @@ class Bot():
                         score = self.minimax(
                             game,
                             self.opponent if player == self.player else self.player,
+                            alpha,
+                            beta,
                             depth + 1
                         )
                         game.board[z][x][y] = ' '
                         score[0], score[1], score[2] = z, x, y
+
                         if player == self.player:
                             if score[-1] > best[-1]:
                                 best = score
+
+                            if best[-1] >= beta:
+                                return best
+
+                            alpha = max(alpha, best[-1])
                         else:
                             if score[-1] < best[-1]:
                                 best = score
+
+                            if best[-1] <= alpha:
+                                return best
+
+                            beta = min(beta, best[-1])
 
         return best
 
@@ -77,7 +90,7 @@ class Bot():
         Args:
         game: Tic tac toe game
         """
-        if random.random() < self.epsilon:
+        if game.turn_num < 5 or random.random() < self.epsilon:
             z, x, y = random.randint(0, game.h - 1), random.randint(0, game.l - 1), random.randint(0, game.w - 1)
             return z, x, y, 0
         else:
