@@ -153,8 +153,9 @@ class Bot():
         player: character for player
         """
         if depth >= self.max_depth or self.game_over(game):
-            # depth-based discounting
-            score = self.evaluate(game) * 0.9 ** depth
+            score = self.evaluate(game)
+            if depth == 0:
+                score *= 10
             return [-1, -1, -1, score]
 
         if player == self.player:
