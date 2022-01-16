@@ -261,7 +261,6 @@ class Game():
         text_image = text_font.render(text_str, True, color)
         self.surface.blit(text_image, (500, 475))
         self.surface.blit(text_image, (50, 475))
-        pygame.display.update()
         return
 
     def get_pos(self, coords):

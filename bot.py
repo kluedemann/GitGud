@@ -137,9 +137,9 @@ class Bot():
         """
         if self.game_over(game):
             if game.check_win(self.player):
-                return 1 if depth != 0 else inf
+                return 1 if depth else inf
             elif game.check_win(self.opponent):
-                return -1 if depth != 0 else -inf
+                return -1 if depth > 2 else -inf
             else:
                 return 0
 
@@ -200,7 +200,7 @@ class Bot():
         Args:
         game: Tic tac toe game
         """
-        if game.turn_num < 4 or random.random() < self.epsilon:
+        if game.turn_num < 3 or random.random() < self.epsilon:
             z, x, y = random.randint(0, game.h - 1), random.randint(0, game.l - 1), random.randint(0, game.w - 1)
             while game.board[z][x][y] != ' ':
                 z, x, y = random.randint(0, game.h - 1), random.randint(0, game.l - 1), random.randint(0, game.w - 1)
