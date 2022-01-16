@@ -31,7 +31,7 @@ class Game():
         self.players = ['X', 'O']
         self.board_coords = self.get_coords()
         self.bot = Bot(self.players[1], max_depth=3, epsilon=0)
-        self.mode = 'A'
+        self.mode = 'AI'
         self.pos = None
         self.winning_line = []
 
