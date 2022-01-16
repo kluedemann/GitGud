@@ -19,7 +19,7 @@ class Bot():
         Args:
         game: Tic tac toe game
         """
-        return any([game.check_win(player) for player in game.players])
+        return any([game.check_win(player)[0] for player in game.players])
 
 
     def heuristic(self, game: 'Game'):
@@ -130,16 +130,16 @@ class Bot():
         return 0
 
 
-    def evaluate(self, game: 'Game'):
+    def evaluate(self, game: 'Game', depth: int):
         """
         Args:
         game: Tic tac toe game
         """
         if self.game_over(game):
             if game.check_win(self.player):
-                return 1
+                return 1 if depth else inf
             elif game.check_win(self.opponent):
-                return -1
+                return -1 if depth > 2 else -inf
             else:
                 return 0
 
@@ -153,9 +153,7 @@ class Bot():
         player: character for player
         """
         if depth >= self.max_depth or self.game_over(game):
-            score = self.evaluate(game)
-            if depth == 0:
-                score *= 10
+            score = self.evaluate(game, depth)
             return [-1, -1, -1, score]
 
         if player == self.player:
@@ -202,7 +200,7 @@ class Bot():
         Args:
         game: Tic tac toe game
         """
-        if game.turn_num < 5 or random.random() < self.epsilon:
+        if game.turn_num < 3 or random.random() < self.epsilon:
             z, x, y = random.randint(0, game.h - 1), random.randint(0, game.l - 1), random.randint(0, game.w - 1)
             while game.board[z][x][y] != ' ':
                 z, x, y = random.randint(0, game.h - 1), random.randint(0, game.l - 1), random.randint(0, game.w - 1)
