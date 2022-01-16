@@ -127,13 +127,59 @@ class Game():
             coords.append(table)
         return coords
 
-    def check_win(self):
+    def check_win(self, player):
         # Check rows/cols
         # assuming x == y == z
+        n = self.l
+        for i in range(n):
+            for j in range(n):
+                count = [0, 0, 0]
+                for k in range(n):
+                    if self.board[i][j][k] == player:
+                        count[0] += 1
+                    if self.board[i][k][j] == player:
+                        count[1] += 1
+                    if self.board[k][i][j] == player:
+                        count[2] += 1
+                for k in range(3):
+                    if count[k] == n:
+                        return True
+        for i in range(n):
+            count = [0] * 6
+            for k in range(n):
+                if self.board[i][k][k] == player:
+                    count[0] += 1
+                if self.board[k][i][k] == player:
+                    count[1] += 1
+                if self.board[k][k][i] == player:
+                    count[2] += 1
+                if self.board[i][n-k-1][k] == player:
+                    count[3] += 1
+                if self.board[n-k-1][i][k] == player:
+                    count[4] += 1
+                if self.board[n-k-1][k][i] == player:
+                    count[5] += 1
+            for k in range(6):
+                if count[k] == n:
+                    return True
+        count = [0] * 4
+        for k in range(n):
+            if self.board[k][k][k] == player:
+                count[0] += 1
+            if self.board[k][k][n-k-1] == player:
+                count[1] += 1
+            if self.board[k][n-k-1][k] == player:
+                count[2] += 1
+            if self.board[k][n-k-1][n-k-1] == player:
+                count[3] += 1
+        for k in range(4):
+            if count[k] == n:
+                return True
         return False
 
 
     def __str__(self) -> str:
+        # Convert board to string
         string = ''
         for z in self.board:
             for x in z:
