@@ -8,9 +8,9 @@ class Game():
     def __init__(
             self,
             surface: pygame.Surface,
-            l: int = 3,
-            w: int = 3,
-            h: int = 3):
+            l: int = 4,
+            w: int = 4,
+            h: int = 4):
         self.surface = surface
         self.bg_color = pygame.Color('black')
         width = self.surface.get_width() // 3
@@ -34,7 +34,7 @@ class Game():
         angle = math.pi / 4
         offset = {
             'x': self.surface.get_width() / 2,
-            'y': self.surface.get_height() / 2 - 300
+            'y': self.surface.get_height() / 2 - 330
         }
 
         for z, board in enumerate(self.board):
@@ -42,29 +42,17 @@ class Game():
                 for y, cube in enumerate(row):
                     center = (
                         int(offset['x'] - 100 * x * math.cos(angle) + 100 * y * math.sin(angle)),
-                        int(offset['y'] + 50 * x * math.cos(angle) + 50 * y * math.sin(angle) + z * 250)
+                        int(offset['y'] + 30 * x * math.cos(angle) + 30 * y * math.sin(angle) + z * 180)
                     )
+                    radius = 5 * (1.1) ** (x + y)
                     if cube == 'X':
-                        pygame.draw.circle(
-                            self.surface,
-                            (255, 0, 0),
-                            center,
-                            5
-                        )
+                        color = (255, 0, 0)
                     elif cube == 'O':
-                        pygame.draw.circle(
-                            self.surface,
-                            (0, 0, 255),
-                            center,
-                            5
-                        )
+                        color = (0, 0, 255)
                     else:
-                        pygame.draw.circle(
-                            self.surface,
-                            (255, 255, 255),
-                            center,
-                            5
-                        )
+                        color = (255, 255, 255)
+
+                    pygame.draw.circle(self.surface, color, center, radius)
         pygame.display.update()
         return
 
