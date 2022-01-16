@@ -200,7 +200,7 @@ class Bot():
         Args:
         game: Tic tac toe game
         """
-        if game.turn_num < 5 or random.random() < self.epsilon:
+        if game.turn_num < 4 or random.random() < self.epsilon:
             z, x, y = random.randint(0, game.h - 1), random.randint(0, game.l - 1), random.randint(0, game.w - 1)
             while game.board[z][x][y] != ' ':
                 z, x, y = random.randint(0, game.h - 1), random.randint(0, game.l - 1), random.randint(0, game.w - 1)
