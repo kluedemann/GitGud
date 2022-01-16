@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 import math
-
+from bot import Bot
 
 class Game():
 
@@ -31,6 +31,8 @@ class Game():
         self.turn_num = 0
         self.players = ['X', 'O']
         self.board_coords = self.get_coords()
+        self.bot = Bot(self.players[1], 2, 0)
+        self.mode = 'AI'
 
     def draw(self):
         # Draw board with coloured circles
@@ -70,6 +72,15 @@ class Game():
             self.get_events()
         return
 
+    def update(self, player: str):
+        print(self)
+        self.draw()
+        self.turn_num += 1
+        if self.check_win(player) or self.turn_num == (self.l * self.w * self.h):
+            self.game_over = True
+            self.draw_over(player)
+
+
     def get_events(self):
         # Get pygame events
         events = pygame.event.get()
@@ -83,15 +94,13 @@ class Game():
                 coords = pygame.mouse.get_pos()
                 if self.move(player, coords):
                     # Successful turn
-                    self.draw()
-                    if self.check_win(player):
-                        self.game_over = True
-                        self.draw_over(player)
-                    print(self)
-                    self.turn_num += 1
-                    if self.turn_num == (self.l * self.w * self.h):
-                        self.game_over = True
-                        self.draw_over(' ')
+                    self.update(player)
+
+                    if self.mode == 'AI' and not self.game_over:
+                        z, x, y, _ = self.bot.action(self)
+                        player = self.players[self.turn_num % 2]
+                        self.turn(player, x, y, z)
+                        self.update(player)
         return
 
     def draw_over(self, player):
