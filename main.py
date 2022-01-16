@@ -29,11 +29,7 @@ class Game():
         self.turn_num = 0
         self.players = ['X', 'O']
         self.board_coords = self.get_coords()
-<<<<<<< HEAD
-        self.bot = Bot(self.players[1], 2, 0)
-=======
         self.bot = Bot(self.players[1], max_depth=3, epsilon=0)
->>>>>>> 18bd23045079e9494dcec2b866866e27bc446be4
         self.mode = 'AI'
         self.pos = None
 
