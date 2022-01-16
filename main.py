@@ -1,3 +1,4 @@
+from typing import Tuple
 import pygame
 from pygame.locals import *
 import math
@@ -30,8 +31,9 @@ class Game():
         self.players = ['X', 'O']
         self.board_coords = self.get_coords()
         self.bot = Bot(self.players[1], max_depth=3, epsilon=0)
-        self.mode = 'AI'
+        self.mode = 'A'
         self.pos = None
+        self.winning_line = []
 
 
     def draw(self, test=True):
@@ -106,8 +108,9 @@ class Game():
         print(self)
         self.turn_num += 1
         self.draw()
+        won, self.winning_line = self.check_win(player)
 
-        if self.check_win(player) or self.turn_num == (self.l * self.w * self.h):
+        if won or self.turn_num == (self.l * self.w * self.h):
             self.game_over = True
             self.draw()
 
@@ -231,21 +234,29 @@ class Game():
         return
 
 
+    def draw_winning_line(self, color: Tuple[int, int, int]):
+        point1, point2 = self.winning_line
+        start = self.board_coords[point1[0]][point1[1]][point1[2]]
+        end = self.board_coords[point2[0]][point2[1]][point2[2]]
+        pygame.draw.line(self.surface, color, start, end)
+
     def draw_over(self):
         if self.turn_num == self.l * self.w*self.h:
             player = ' '
         else:
             player = self.players[1 - self.turn_num % 2]
-        if player != ' ':
-            text_str = f"{player} wins!"
-        else:
-            text_str = f"Tie!"
         if player == 'X':
             color = (255, 0, 0)
         elif player == 'O':
             color = (0, 0, 255)
         else:
             color = (255, 255, 255)
+        if player != ' ':
+            text_str = f"{player} wins!"
+            self.draw_winning_line(color)
+        else:
+            text_str = f"Tie!"
+
         text_font = pygame.font.SysFont('', 75)
         text_image = text_font.render(text_str, True, color)
         self.surface.blit(text_image, (500, 475))
@@ -309,7 +320,13 @@ class Game():
                         count[2] += 1
                 for k in range(3):
                     if count[k] == n:
-                        return True
+                        if k == 0:
+                            winning_line = [(i, j, 0), (i, j, n - 1)]
+                        elif k == 1:
+                            winning_line = [(i, 0, j), (i, n - 1, j)]
+                        elif k == 2:
+                            winning_line = [(0, i, j), (n - 1, i, j)]
+                        return True, winning_line
         for i in range(n):
             count = [0] * 6
             for k in range(n):
@@ -327,7 +344,19 @@ class Game():
                     count[5] += 1
             for k in range(6):
                 if count[k] == n:
-                    return True
+                    if k == 0:
+                        winning_line = [(i, 0, 0), (i, n - 1, n - 1)]
+                    elif k == 1:
+                        winning_line = [(0, i, 0), (n - 1, i, n - 1)]
+                    elif k == 2:
+                        winning_line = [(0, 0, i), (n - 1, n - 1, i)]
+                    elif k == 3:
+                        winning_line = [(i, n - 1, 0), (i, 0, n - 1)]
+                    elif k == 4:
+                        winning_line = [(0, n - 1, i), (n - 1, 0, i)]
+                    elif k == 5:
+                        winning_line = [(n - 1, 0, i), (0, n - 1, i)]
+                    return True, winning_line
         count = [0] * 4
         for k in range(n):
             if self.board[k][k][k] == player:
@@ -340,8 +369,16 @@ class Game():
                 count[3] += 1
         for k in range(4):
             if count[k] == n:
-                return True
-        return False
+                if k == 0:
+                    winning_line = [(0, 0, 0), (n - 1, n - 1, n - 1)]
+                elif k == 1:
+                    winning_line = [(0, 0, n - 1), (n - 1, n - 1, 0)]
+                elif k == 2:
+                    winning_line = [(0, n - 1, 0), (n - 1, 0, n - 1)]
+                elif k == 3:
+                    winning_line = [(0, n - 1, n - 1), (n - 1, 0, 0)]
+                return True, winning_line
+        return False, []
 
 
     def __str__(self) -> str:
