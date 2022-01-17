@@ -402,7 +402,7 @@ class Game():
                     elif k == 3:
                         winning_line = [(i, n - 1, 0), (i, 0, n - 1)]
                     elif k == 4:
-                        winning_line = [(0, n - 1, i), (n - 1, 0, i)]
+                        winning_line = [(n - 1, i, 0), (0, i, n - 1)]
                     elif k == 5:
                         winning_line = [(n - 1, 0, i), (0, n - 1, i)]
                     return True, winning_line

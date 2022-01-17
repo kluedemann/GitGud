@@ -136,10 +136,10 @@ class Bot():
         game: Tic tac toe game
         """
         if self.game_over(game):
-            if game.check_win(self.player):
-                return 1 if depth else 10
-            elif game.check_win(self.opponent):
-                return -1 if depth > 2 else -20
+            if game.check_win(self.opponent)[0]:
+                return -1 if depth > 2 else -10
+            elif game.check_win(self.player)[0]:
+                return 1 if depth > 1 else 10
             else:
                 return 0
 
